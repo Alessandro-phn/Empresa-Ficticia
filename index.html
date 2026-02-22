@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaDrive Industries — Dashboard Corporativo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c24;
+    --border: rgba(255,255,255,0.07);
+    --accent: #e8302a;
+    --accent2: #ff6b35;
+    --gold: #f5c842;
+    --teal: #00d4aa;
+    --blue: #4e8ef7;
+    --text: #f0f2f5;
+    --muted: #6b7280;
+    --success: #22c55e;
+    --warn: #f59e0b;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BACKGROUND TEXTURE */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background: 
+      radial-gradient(ellipse 80% 50% at 10% 20%, rgba(232,48,42,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(78,142,247,0.05) 0%, transparent 60%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top:0;
+    z-index: 100;
+    background: rgba(10,12,16,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 0 2.5rem;
+    height: 64px;
+  }
+  .logo {
+    display:flex;
+    align-items:center;
+    gap: 12px;
+  }
+  .logo-icon {
+    width:38px; height:38px;
+    background: var(--accent);
+    clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Bebas Neue';
+    font-size:16px;
+    color:#fff;
+    letter-spacing:1px;
+  }
+  .logo-text {
+    font-family:'Bebas Neue';
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: var(--text);
+  }
+  .logo-text span { color: var(--accent); }
+  .header-right {
+    display:flex;
+    align-items:center;
+    gap: 24px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .header-badge {
+    background: rgba(232,48,42,0.15);
+    border: 1px solid rgba(232,48,42,0.3);
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: 'DM Mono';
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    animation: pulse-badge 2s ease-in-out infinite;
+  }
+  @keyframes pulse-badge {
+    0%,100%{opacity:1} 50%{opacity:0.6}
+  }
+  .live-dot {
+    width:8px; height:8px;
+    background: var(--success);
+    border-radius:50%;
+    display:inline-block;
+    margin-right:6px;
+    box-shadow:0 0 8px var(--success);
+    animation: blink 1.5s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+  /* LAYOUT */
+  .container {
+    position:relative;
+    z-index:1;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem 2.5rem;
+  }
+
+  /* SECTION TITLE */
+  .section-header {
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    margin-bottom: 1.5rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue';
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--text);
+  }
+  .section-line {
+    flex:1;
+    height:1px;
+    background: var(--border);
+  }
+  .section-tag {
+    font-family:'DM Mono';
+    font-size:10px;
+    color:var(--muted);
+    letter-spacing:2px;
+    text-transform:uppercase;
+  }
+
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  @media(max-width:1200px){ .kpi-grid{grid-template-columns:repeat(3,1fr);} }
+  @media(max-width:768px){ .kpi-grid{grid-template-columns:repeat(2,1fr);} }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    position:relative;
+    overflow:hidden;
+    transition: transform 0.2s, border-color 0.2s;
+    animation: fadeUp 0.5s ease both;
+  }
+  .kpi-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(232,48,42,0.3);
+  }
+  .kpi-card::before {
+    content:'';
+    position:absolute;
+    top:0; left:0; right:0;
+    height:2px;
+    background: var(--card-accent, var(--accent));
+  }
+  .kpi-label {
+    font-size:11px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    margin-bottom:8px;
+    font-family:'DM Mono';
+  }
+  .kpi-value {
+    font-family:'Bebas Neue';
+    font-size:34px;
+    letter-spacing:1px;
+    color:var(--text);
+    line-height:1;
+  }
+  .kpi-sub {
+    font-size:12px;
+    color:var(--muted);
+    margin-top:6px;
+    display:flex;
+    align-items:center;
+    gap:4px;
+  }
+  .kpi-sub.up { color: var(--success); }
+  .kpi-sub.down { color: var(--accent); }
+  .kpi-sub.warn { color: var(--warn); }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  /* MAIN GRID */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  @media(max-width:1100px){ .main-grid{grid-template-columns:1fr;} }
+
+  .sub-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  @media(max-width:900px){ .sub-grid{grid-template-columns:1fr;} }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    animation: fadeUp 0.5s ease both;
+  }
+  .card-title {
+    font-family:'Bebas Neue';
+    font-size:16px;
+    letter-spacing:2px;
+    color:var(--muted);
+    margin-bottom:1.2rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .card-title span { 
+    font-family:'DM Mono';
+    font-size:11px;
+    color:var(--muted);
+    font-weight:400;
+    letter-spacing:1px;
+  }
+
+  /* ORG CHART */
+  .org-chart {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0;
+    padding: 1rem 0;
+    overflow-x:auto;
+  }
+  .org-row {
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    position:relative;
+    padding: 8px 0;
+  }
+  .org-node {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    text-align:center;
+    min-width: 110px;
+    font-size:11px;
+    color:var(--text);
+    position:relative;
+    transition: border-color 0.2s;
+  }
+  .org-node:hover { border-color: var(--accent); }
+  .org-node.top {
+    background: linear-gradient(135deg, var(--accent), #c0211b);
+    border-color: var(--accent);
+    color:#fff;
+    min-width:130px;
+    padding:10px 20px;
+    font-size:12px;
+  }
+  .org-node.mid { border-color: rgba(78,142,247,0.4); }
+  .org-name {
+    font-weight:600;
+    font-size:11px;
+    white-space:nowrap;
+  }
+  .org-role {
+    color:var(--muted);
+    font-size:9px;
+    margin-top:2px;
+    font-family:'DM Mono';
+  }
+  .org-node.top .org-role { color:rgba(255,255,255,0.7); }
+  .org-connector {
+    width:1px; height:20px;
+    background: var(--border);
+    margin:0 auto;
+  }
+  .org-connector-h {
+    display:flex;
+    justify-content:center;
+    width:100%;
+    position:relative;
+  }
+  .org-connector-h::before {
+    content:'';
+    position:absolute;
+    top:50%;
+    height:1px;
+    background: var(--border);
+    width:80%;
+  }
+
+  /* BAR CHART */
+  .bar-chart { display:flex; flex-direction:column; gap:10px; }
+  .bar-row { display:flex; align-items:center; gap:12px; }
+  .bar-label {
+    font-size:11px;
+    color:var(--muted);
+    width:140px;
+    flex-shrink:0;
+    font-family:'DM Mono';
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .bar-track {
+    flex:1;
+    height:8px;
+    background: var(--surface2);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .bar-fill {
+    height:100%;
+    border-radius:4px;
+    background: var(--bar-color, var(--accent));
+    transition: width 1s cubic-bezier(.4,0,.2,1);
+    animation: barGrow 1.2s ease both;
+    transform-origin: left;
+  }
+  @keyframes barGrow { from{width:0!important} }
+  .bar-val {
+    font-family:'DM Mono';
+    font-size:11px;
+    color:var(--text);
+    width:50px;
+    text-align:right;
+    flex-shrink:0;
+  }
+
+  /* TABLE */
+  .data-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .data-table th {
+    padding:8px 12px;
+    text-align:left;
+    font-family:'DM Mono';
+    font-size:10px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--muted);
+    border-bottom:1px solid var(--border);
+    font-weight:400;
+  }
+  .data-table td {
+    padding:10px 12px;
+    border-bottom:1px solid rgba(255,255,255,0.04);
+    color:var(--text);
+  }
+  .data-table tr:hover td { background:rgba(255,255,255,0.02); }
+  .data-table tr:last-child td { border-bottom:none; }
+
+  /* STATUS BADGES */
+  .badge {
+    padding:3px 10px;
+    border-radius:20px;
+    font-size:10px;
+    font-family:'DM Mono';
+    letter-spacing:1px;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .badge-green { background:rgba(34,197,94,0.15); color:var(--success); border:1px solid rgba(34,197,94,0.2); }
+  .badge-red { background:rgba(232,48,42,0.15); color:var(--accent); border:1px solid rgba(232,48,42,0.2); }
+  .badge-yellow { background:rgba(245,158,11,0.15); color:var(--warn); border:1px solid rgba(245,158,11,0.2); }
+  .badge-blue { background:rgba(78,142,247,0.15); color:var(--blue); border:1px solid rgba(78,142,247,0.2); }
+
+  /* DONUT */
+  .donut-wrap {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+  }
+  .donut-svg { flex-shrink:0; }
+  .donut-legend { flex:1; display:flex; flex-direction:column; gap:10px; }
+  .legend-item { display:flex; align-items:center; gap:8px; font-size:12px; }
+  .legend-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+  .legend-name { color:var(--muted); flex:1; font-size:11px; }
+  .legend-val { font-family:'DM Mono'; font-size:11px; color:var(--text); }
+
+  /* MINI SPARKLINE */
+  .spark { display:flex; align-items:flex-end; gap:3px; height:40px; }
+  .spark-bar {
+    flex:1;
+    background: rgba(232,48,42,0.3);
+    border-radius:2px 2px 0 0;
+    transition: background 0.2s;
+  }
+  .spark-bar:hover { background: var(--accent); }
+
+  /* HEADCOUNT CARDS */
+  .dept-grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+  }
+  @media(max-width:900px){ .dept-grid{grid-template-columns:repeat(2,1fr);} }
+  .dept-card {
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px;
+    transition: transform 0.2s;
+  }
+  .dept-card:hover { transform: scale(1.02); }
+  .dept-icon {
+    font-size:24px;
+    margin-bottom:8px;
+    display:block;
+  }
+  .dept-name {
+    font-size:11px;
+    color:var(--muted);
+    font-family:'DM Mono';
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-bottom:4px;
+  }
+  .dept-count {
+    font-family:'Bebas Neue';
+    font-size:28px;
+    color:var(--text);
+    line-height:1;
+  }
+  .dept-sub { font-size:11px; color:var(--muted); margin-top:4px; }
+
+  /* TIMELINE */
+  .timeline { display:flex; flex-direction:column; gap:0; }
+  .tl-item { display:flex; gap:16px; padding-bottom:16px; position:relative; }
+  .tl-item:last-child { padding-bottom:0; }
+  .tl-left { display:flex; flex-direction:column; align-items:center; width:32px; flex-shrink:0; }
+  .tl-dot {
+    width:10px; height:10px;
+    border-radius:50%;
+    background:var(--dot-color, var(--accent));
+    flex-shrink:0;
+    margin-top:4px;
+    box-shadow:0 0 8px var(--dot-color, var(--accent));
+  }
+  .tl-line {
+    flex:1;
+    width:1px;
+    background:var(--border);
+    margin-top:4px;
+  }
+  .tl-item:last-child .tl-line { display:none; }
+  .tl-content { flex:1; }
+  .tl-title { font-size:12px; font-weight:500; color:var(--text); }
+  .tl-date { font-size:10px; color:var(--muted); font-family:'DM Mono'; margin-top:2px; }
+  .tl-desc { font-size:11px; color:var(--muted); margin-top:4px; line-height:1.5; }
+
+  /* ATTENDANCE HEATMAP */
+  .heatmap {
+    display:grid;
+    grid-template-columns: auto repeat(12,1fr);
+    gap:4px;
+    font-size:10px;
+    font-family:'DM Mono';
+    color:var(--muted);
+  }
+  .hm-label { padding:4px 8px 4px 0; display:flex; align-items:center; white-space:nowrap; }
+  .hm-cell {
+    height:24px;
+    border-radius:3px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:9px;
+    color:rgba(0,0,0,0.6);
+    font-family:'DM Mono';
+  }
+
+  /* PROGRESS RING */
+  .progress-row {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .progress-item {
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .progress-info { flex:1; }
+  .progress-name { font-size:12px; color:var(--text); font-weight:500; }
+  .progress-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+  .progress-bar-wrap {
+    width:100%;
+    height:6px;
+    background:var(--surface2);
+    border-radius:3px;
+    overflow:hidden;
+    margin-top:6px;
+  }
+  .progress-bar {
+    height:100%;
+    border-radius:3px;
+    animation: barGrow 1.5s ease both;
+  }
+  .progress-pct {
+    font-family:'DM Mono';
+    font-size:13px;
+    font-weight:500;
+    color:var(--text);
+    width:40px;
+    text-align:right;
+  }
+
+  /* STACKED BAR CHART */
+  .stacked-chart { display:flex; gap:10px; align-items:flex-end; height:120px; }
+  .stacked-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .stacked-bar-wrap { width:100%; display:flex; flex-direction:column-reverse; height:90px; }
+  .stacked-seg {
+    width:100%;
+    border-radius:2px;
+    transition: opacity 0.2s;
+  }
+  .stacked-seg:hover { opacity:0.8; cursor:pointer; }
+  .stacked-month { font-family:'DM Mono'; font-size:9px; color:var(--muted); }
+
+  /* FLEET TABLE */
+  .fleet-status { display:flex; gap:6px; align-items:center; }
+  .fleet-dot { width:8px; height:8px; border-radius:50%; }
+
+  /* VEHICLES DONUT - SVG */
+  svg.donut circle { transition: stroke-dashoffset 0.8s ease; }
+
+  /* RESPONSIVE */
+  @media(max-width:768px){
+    .kpi-grid { grid-template-columns: repeat(2,1fr); }
+    .sub-grid, .main-grid { grid-template-columns: 1fr; }
+    .dept-grid { grid-template-columns: repeat(2,1fr); }
+  }
+
+  /* FOOTER */
+  footer {
+    position:relative;
+    z-index:1;
+    margin-top: 3rem;
+    border-top: 1px solid var(--border);
+    padding: 2rem 2.5rem;
+    text-align:center;
+    background: var(--surface);
+  }
+  .footer-disclaimer {
+    font-size: 13px;
+    color: var(--muted);
+    line-height:1.8;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .footer-disclaimer strong { color: var(--warn); }
+  .footer-logo {
+    font-family:'Bebas Neue';
+    font-size:18px;
+    letter-spacing:3px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .footer-tags {
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:12px;
+    flex-wrap:wrap;
+  }
+  .footer-tag {
+    font-family:'DM Mono';
+    font-size:10px;
+    color:var(--muted);
+    background:var(--surface2);
+    border:1px solid var(--border);
+    padding:3px 10px;
+    border-radius:20px;
+    letter-spacing:1px;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display:flex;
+    gap:0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+    overflow-x:auto;
+  }
+  .nav-tab {
+    padding:10px 20px;
+    font-family:'DM Mono';
+    font-size:11px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--muted);
+    cursor:pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space:nowrap;
+    background:none;
+    border-top:none; border-left:none; border-right:none;
+    outline:none;
+  }
+  .nav-tab.active {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+  }
+  .nav-tab:hover:not(.active) { color: var(--text); }
+
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; animation: fadeUp 0.3s ease both; }
+
+  /* ALERT STRIP */
+  .alert-strip {
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius:8px;
+    padding:10px 16px;
+    font-size:12px;
+    color:var(--warn);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:1.5rem;
+    font-family:'DM Mono';
+  }
+
+  /* PERSON CARD */
+  .people-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    gap:12px;
+  }
+  .person-card {
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px;
+    text-align:center;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .person-card:hover { transform:translateY(-4px); border-color:rgba(232,48,42,0.3); }
+  .avatar {
+    width:48px; height:48px;
+    border-radius:50%;
+    background:var(--av-color);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Bebas Neue';
+    font-size:20px;
+    color:#fff;
+    margin: 0 auto 10px;
+  }
+  .person-name { font-size:12px; font-weight:600; color:var(--text); }
+  .person-role { font-size:10px; color:var(--muted); margin-top:3px; font-family:'DM Mono'; }
+  .person-dept {
+    margin-top:8px;
+    font-size:10px;
+    padding:2px 8px;
+    border-radius:10px;
+    display:inline-block;
+    font-family:'DM Mono';
+    letter-spacing:1px;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">NDI</div>
+    <div class="logo-text">NOVADRIVE <span>INDUSTRIES</span></div>
+  </div>
+  <div class="header-right">
+    <span><span class="live-dot"></span>Sistema Ativo</span>
+    <span style="color:var(--text);font-family:'DM Mono';font-size:12px" id="clock"></span>
+    <span class="header-badge">Dashboard Corporativo</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ALERT -->
+  <div class="alert-strip">
+    ⚠️ &nbsp; Manutenção Preventiva Linha 3 agendada para 25/02/2026 — Área: Estamparia. Responsável: Eng. C. Menezes.
+  </div>
+
+  <!-- NAV TABS -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('geral')">Geral</button>
+    <button class="nav-tab" onclick="switchTab('pessoas')">Pessoas & RH</button>
+    <button class="nav-tab" onclick="switchTab('producao')">Produção</button>
+    <button class="nav-tab" onclick="switchTab('financeiro')">Financeiro</button>
+    <button class="nav-tab" onclick="switchTab('frota')">Frota & Logística</button>
+    <button class="nav-tab" onclick="switchTab('operacional')">Operacional</button>
+  </div>
+
+  <!-- ============= TAB: GERAL ============= -->
+  <div class="tab-panel active" id="tab-geral">
+
+    <!-- KPIs PRINCIPAIS -->
+    <div class="section-header">
+      <div class="section-title">Indicadores Globais</div>
+      <div class="section-line"></div>
+      <div class="section-tag">Fev / 2026</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--card-accent:var(--accent); animation-delay:0.05s">
+        <div class="kpi-label">Faturamento Mensal</div>
+        <div class="kpi-value">R$48,2M</div>
+        <div class="kpi-sub up">▲ 7,4% vs. jan</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--teal); animation-delay:0.1s">
+        <div class="kpi-label">Veículos Produzidos</div>
+        <div class="kpi-value">3.840</div>
+        <div class="kpi-sub up">▲ 5,2% vs. jan</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--blue); animation-delay:0.15s">
+        <div class="kpi-label">Colaboradores</div>
+        <div class="kpi-value">2.347</div>
+        <div class="kpi-sub" style="color:var(--muted)">→ estável</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--gold); animation-delay:0.2s">
+        <div class="kpi-label">Qualidade (PPM)</div>
+        <div class="kpi-value">127</div>
+        <div class="kpi-sub up">▼ 18 ppm melhora</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--accent2); animation-delay:0.25s">
+        <div class="kpi-label">Absenteísmo</div>
+        <div class="kpi-value">3,1%</div>
+        <div class="kpi-sub warn">▲ 0,3% vs. jan</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:#00d4aa; animation-delay:0.3s">
+        <div class="kpi-label">OEE Geral</div>
+        <div class="kpi-value">82,4%</div>
+        <div class="kpi-sub up">▲ 1,2% vs. jan</div>
+      </div>
+    </div>
+
+    <!-- ORGANOGRAMA + ALERTAS -->
+    <div class="main-grid">
+      <div class="card">
+        <div class="card-title">Estrutura Organizacional <span>Hierarquia</span></div>
+        <div class="org-chart">
+          <!-- Presidente -->
+          <div class="org-row">
+            <div class="org-node top">
+              <div class="org-name">Rafael Andrade</div>
+              <div class="org-role">Presidente / CEO</div>
+            </div>
+          </div>
+          <div class="org-connector"></div>
+          <!-- VPs -->
+          <div class="org-connector-h"></div>
+          <div class="org-row">
+            <div class="org-node mid">
+              <div class="org-name">Beatriz Monteiro</div>
+              <div class="org-role">VP Operações</div>
+            </div>
+            <div class="org-node mid">
+              <div class="org-name">Marcelo Torres</div>
+              <div class="org-role">VP Financeiro</div>
+            </div>
+            <div class="org-node mid">
+              <div class="org-name">Júlia Martins</div>
+              <div class="org-role">VP Pessoas & RH</div>
+            </div>
+            <div class="org-node mid">
+              <div class="org-name">Paulo Carvalho</div>
+              <div class="org-role">VP Engenharia</div>
+            </div>
+          </div>
+          <div class="org-connector"></div>
+          <!-- Diretores -->
+          <div class="org-row">
+            <div class="org-node"><div class="org-name">Fernando Leal</div><div class="org-role">Dir. Produção</div></div>
+            <div class="org-node"><div class="org-name">Larissa Neves</div><div class="org-role">Dir. Qualidade</div></div>
+            <div class="org-node"><div class="org-name">Daniel Souza</div><div class="org-role">Dir. Logística</div></div>
+            <div class="org-node"><div class="org-name">Carolina Rocha</div><div class="org-role">Dir. Mkt & Vendas</div></div>
+            <div class="org-node"><div class="org-name">Tiago Fonseca</div><div class="org-role">Dir. TI</div></div>
+            <div class="org-node"><div class="org-name">Renata Borges</div><div class="org-role">Dir. Jurídico</div></div>
+          </div>
+          <div class="org-connector"></div>
+          <!-- Operacional -->
+          <div class="org-row" style="flex-wrap:wrap">
+            <div class="org-node"><div class="org-name">Coord. Estamparia</div></div>
+            <div class="org-node"><div class="org-name">Coord. Pintura</div></div>
+            <div class="org-node"><div class="org-name">Coord. Montagem</div></div>
+            <div class="org-node"><div class="org-name">Coord. Manutenção</div></div>
+            <div class="org-node"><div class="org-name">Coord. Almoxarifado</div></div>
+            <div class="org-node"><div class="org-name">Coord. Segurança</div></div>
+          </div>
+          <div class="org-connector"></div>
+          <div class="org-row" style="flex-wrap:wrap">
+            <div class="org-node"><div class="org-name">Operadores</div><div class="org-role">1.200 pessoas</div></div>
+            <div class="org-node"><div class="org-name">Técnicos</div><div class="org-role">480 pessoas</div></div>
+            <div class="org-node"><div class="org-name">Administrativos</div><div class="org-role">320 pessoas</div></div>
+            <div class="org-node"><div class="org-name">Serv. Gerais</div><div class="org-role">115 pessoas</div></div>
+            <div class="org-node"><div class="org-name">Segurança Patrimonial</div><div class="org-role">62 pessoas</div></div>
+            <div class="org-node"><div class="org-name">Portaria / Recepção</div><div class="org-role">18 pessoas</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- ALERTAS -->
+      <div style="display:flex;flex-direction:column;gap:1.5rem;">
+        <div class="card">
+          <div class="card-title">Eventos Recentes <span>Timeline</span></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-left"><div class="tl-dot" style="--dot-color:var(--success)"></div><div class="tl-line"></div></div>
+              <div class="tl-content">
+                <div class="tl-title">Meta de produção atingida</div>
+                <div class="tl-date">20/02/2026 · 17:42</div>
+                <div class="tl-desc">Linha 1 e 2 superaram o target de 3.800 unidades/mês.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-left"><div class="tl-dot" style="--dot-color:var(--warn)"></div><div class="tl-line"></div></div>
+              <div class="tl-content">
+                <div class="tl-title">Alerta de manutenção — Linha 3</div>
+                <div class="tl-date">19/02/2026 · 09:15</div>
+                <div class="tl-desc">Prensa P-07 com vibração fora do padrão. Ordem de serviço aberta.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-left"><div class="tl-dot" style="--dot-color:var(--blue)"></div><div class="tl-line"></div></div>
+              <div class="tl-content">
+                <div class="tl-title">Novo colaborador(es) integrados</div>
+                <div class="tl-date">18/02/2026 · 08:00</div>
+                <div class="tl-desc">12 operadores iniciaram o programa de integração industrial.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-left"><div class="tl-dot" style="--dot-color:var(--teal)"></div><div class="tl-line"></div></div>
+              <div class="tl-content">
+                <div class="tl-title">Auditoria ISO 9001 concluída</div>
+                <div class="tl-date">15/02/2026 · 16:00</div>
+                <div class="tl-desc">Certificação renovada sem não-conformidades críticas.</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-left"><div class="tl-dot" style="--dot-color:var(--accent)"></div></div>
+              <div class="tl-content">
+                <div class="tl-title">Simulação de Evento Operacional (Fictício)</div>
+                <div class="tl-date">13/02/2026 · 11:30</div>
+                <div class="tl-desc">Registro simulado de ocorrência leve para fins de estudo. Dados fictícios.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPARTAMENTOS -->
+    <div class="section-header" style="margin-top:2rem">
+      <div class="section-title">Headcount por Departamento</div>
+      <div class="section-line"></div>
+    </div>
+    <div class="dept-grid" style="margin-bottom:2rem">
+      <div class="dept-card"><span class="dept-icon">🏭</span><div class="dept-name">Produção</div><div class="dept-count">847</div><div class="dept-sub">3 linhas ativas</div></div>
+      <div class="dept-card"><span class="dept-icon">🔧</span><div class="dept-name">Manutenção</div><div class="dept-count">213</div><div class="dept-sub">Preventiva + Corretiva</div></div>
+      <div class="dept-card"><span class="dept-icon">📦</span><div class="dept-name">Logística</div><div class="dept-count">189</div><div class="dept-sub">Almoxarife & Expedição</div></div>
+      <div class="dept-card"><span class="dept-icon">🎨</span><div class="dept-name">Pintura</div><div class="dept-count">142</div><div class="dept-sub">2 cabines ativas</div></div>
+      <div class="dept-card"><span class="dept-icon">💼</span><div class="dept-name">Administrativo</div><div class="dept-count">320</div><div class="dept-sub">Financeiro, RH, Jurídico</div></div>
+      <div class="dept-card"><span class="dept-icon">🛡️</span><div class="dept-name">Segurança</div><div class="dept-count">62</div><div class="dept-sub">Patrimonial + CIPA</div></div>
+      <div class="dept-card"><span class="dept-icon">🖥️</span><div class="dept-name">TI</div><div class="dept-count">58</div><div class="dept-sub">Infra + Sistemas</div></div>
+      <div class="dept-card"><span class="dept-icon">🏷️</span><div class="dept-name">Portaria & Serviços</div><div class="dept-count">133</div><div class="dept-sub">Porteiros, Faxineiros, Refeitório</div></div>
+    </div>
+
+  </div>
+
+  <!-- ============= TAB: PESSOAS ============= -->
+  <div class="tab-panel" id="tab-pessoas">
+
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--card-accent:var(--blue)">
+        <div class="kpi-label">Total Colaboradores</div>
+        <div class="kpi-value">2.347</div>
+        <div class="kpi-sub" style="color:var(--muted)">CLT: 2.180 · PJ: 167</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--teal)">
+        <div class="kpi-label">Contratações (Mês)</div>
+        <div class="kpi-value">34</div>
+        <div class="kpi-sub up">▲ 12 vs. jan</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--accent)">
+        <div class="kpi-label">Demissões (Mês)</div>
+        <div class="kpi-value">18</div>
+        <div class="kpi-sub down">▼ 5 vs. jan</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--warn)">
+        <div class="kpi-label">Absenteísmo</div>
+        <div class="kpi-value">3,1%</div>
+        <div class="kpi-sub warn">Meta: 2,5%</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--gold)">
+        <div class="kpi-label">Horas Treinamento</div>
+        <div class="kpi-value">4.820h</div>
+        <div class="kpi-sub up">▲ 320h vs. jan</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--success)">
+        <div class="kpi-label">eNPS Interno</div>
+        <div class="kpi-value">+62</div>
+        <div class="kpi-sub up">▲ 4 pontos</div>
+      </div>
+    </div>
+
+    <div class="sub-grid">
+      <div class="card">
+        <div class="card-title">Distribuição por Nível <span>Cargos</span></div>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label">Operador Nível I</div><div class="bar-track"><div class="bar-fill" style="width:72%;--bar-color:var(--accent)"></div></div><div class="bar-val">680</div></div>
+          <div class="bar-row"><div class="bar-label">Operador Nível II</div><div class="bar-track"><div class="bar-fill" style="width:55%;--bar-color:var(--accent)"></div></div><div class="bar-val">520</div></div>
+          <div class="bar-row"><div class="bar-label">Técnico Especializado</div><div class="bar-track"><div class="bar-fill" style="width:42%;--bar-color:var(--blue)"></div></div><div class="bar-val">398</div></div>
+          <div class="bar-row"><div class="bar-label">Analista Jr/Pl/Sr</div><div class="bar-track"><div class="bar-fill" style="width:34%;--bar-color:var(--teal)"></div></div><div class="bar-val">320</div></div>
+          <div class="bar-row"><div class="bar-label">Serviços Gerais</div><div class="bar-track"><div class="bar-fill" style="width:14%;--bar-color:var(--muted)"></div></div><div class="bar-val">133</div></div>
+          <div class="bar-row"><div class="bar-label">Supervisores</div><div class="bar-track"><div class="bar-fill" style="width:10%;--bar-color:var(--gold)"></div></div><div class="bar-val">94</div></div>
+          <div class="bar-row"><div class="bar-label">Coordenadores</div><div class="bar-track"><div class="bar-fill" style="width:7%;--bar-color:var(--gold)"></div></div><div class="bar-val">66</div></div>
+          <div class="bar-row"><div class="bar-label">Gerentes / Diretores</div><div class="bar-track"><div class="bar-fill" style="width:4%;--bar-color:var(--accent2)"></div></div><div class="bar-val">32</div></div>
+          <div class="bar-row"><div class="bar-label">C-Level / VPs</div><div class="bar-track"><div class="bar-fill" style="width:1%;--bar-color:var(--accent)"></div></div><div class="bar-val">9</div></div>
+          <div class="bar-row"><div class="bar-label">Portaria / Recepção</div><div class="bar-track"><div class="bar-fill" style="width:2%;--bar-color:var(--muted)"></div></div><div class="bar-val">18</div></div>
+          <div class="bar-row"><div class="bar-label">Segurança Patrim.</div><div class="bar-track"><div class="bar-fill" style="width:6%;--bar-color:var(--blue)"></div></div><div class="bar-val">62</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Diversidade <span>Gênero & Faixa Etária</span></div>
+        <div style="margin-bottom:1rem">
+          <div style="font-size:11px;color:var(--muted);font-family:'DM Mono';letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Gênero</div>
+          <div style="display:flex;gap:6px;height:28px;border-radius:6px;overflow:hidden">
+            <div style="width:62%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-family:'DM Mono'">62% M</div>
+            <div style="width:35%;background:#e040fb;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-family:'DM Mono'">35% F</div>
+            <div style="width:3%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;font-family:'DM Mono'">3%</div>
+          </div>
+          <div style="display:flex;gap:16px;margin-top:8px;font-size:10px;color:var(--muted);font-family:'DM Mono'">
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;background:var(--blue);border-radius:2px;display:inline-block"></span>Masculino</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;background:#e040fb;border-radius:2px;display:inline-block"></span>Feminino</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;background:var(--teal);border-radius:2px;display:inline-block"></span>Outro</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--muted);font-family:'DM Mono';letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Faixa Etária</div>
+          <div class="bar-chart">
+            <div class="bar-row"><div class="bar-label">18–25 anos</div><div class="bar-track"><div class="bar-fill" style="width:22%;--bar-color:var(--teal)"></div></div><div class="bar-val">14%</div></div>
+            <div class="bar-row"><div class="bar-label">26–35 anos</div><div class="bar-track"><div class="bar-fill" style="width:48%;--bar-color:var(--blue)"></div></div><div class="bar-val">31%</div></div>
+            <div class="bar-row"><div class="bar-label">36–45 anos</div><div class="bar-track"><div class="bar-fill" style="width:56%;--bar-color:var(--gold)"></div></div><div class="bar-val">36%</div></div>
+            <div class="bar-row"><div class="bar-label">46–55 anos</div><div class="bar-track"><div class="bar-fill" style="width:28%;--bar-color:var(--accent2)"></div></div><div class="bar-val">15%</div></div>
+            <div class="bar-row"><div class="bar-label">56+ anos</div><div class="bar-track"><div class="bar-fill" style="width:7%;--bar-color:var(--muted)"></div></div><div class="bar-val">4%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pessoas destaque -->
+    <div class="section-header">
+      <div class="section-title">Destaques da Liderança</div>
+      <div class="section-line"></div>
+    </div>
+    <div class="people-grid">
+      <div class="person-card"><div class="avatar" style="--av-color:var(--accent)">RG</div><div class="person-name">Rafael Andrade</div><div class="person-role">CEO / Presidente</div><div class="person-dept badge badge-red">Diretoria</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:var(--blue)">AB</div><div class="person-name">Ana B. Silva</div><div class="person-role">VP Operações</div><div class="person-dept badge badge-blue">Operações</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:var(--teal)">MO</div><div class="person-name">Marcelo Torres</div><div class="person-role">VP Financeiro</div><div class="person-dept badge badge-blue">Financeiro</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:#e040fb)">JF</div><div class="person-name">Júlia Martins</div><div class="person-role">VP RH</div><div class="person-dept badge badge-blue">RH</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:var(--gold)">PC</div><div class="person-name">Paulo Carvalho</div><div class="person-role">VP Engenharia</div><div class="person-dept badge badge-yellow">Engenharia</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:#ff6b35">FR</div><div class="person-name">Fernando Leal</div><div class="person-role">Dir. Produção</div><div class="person-dept badge badge-yellow">Produção</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:var(--teal)">LN</div><div class="person-name">Larissa Neves</div><div class="person-role">Dir. Qualidade</div><div class="person-dept badge badge-green">Qualidade</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:var(--blue)">DS</div><div class="person-name">Daniel Souza</div><div class="person-role">Dir. Logística</div><div class="person-dept badge badge-blue">Logística</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:var(--accent)">CR</div><div class="person-name">Carolina Rocha</div><div class="person-role">Dir. Mkt & Vendas</div><div class="person-dept badge badge-red">Comercial</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:#6b7280">JM</div><div class="person-name">J. Marcelino</div><div class="person-role">Sup. Portaria</div><div class="person-dept badge" style="background:rgba(107,114,128,0.15);color:var(--muted);border:1px solid var(--border)">Apoio</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:#6b7280">MA</div><div class="person-name">M. Aparecida</div><div class="person-role">Coord. Limpeza</div><div class="person-dept badge" style="background:rgba(107,114,128,0.15);color:var(--muted);border:1px solid var(--border)">Serv. Gerais</div></div>
+      <div class="person-card"><div class="avatar" style="--av-color:var(--success)">TA</div><div class="person-name">Tiago Fonseca</div><div class="person-role">Dir. TI</div><div class="person-dept badge badge-green">TI</div></div>
+    </div>
+
+    <!-- Tabela Cargos Operacionais -->
+    <div class="card" style="margin-top:1.5rem">
+      <div class="card-title">Quadro de Pessoal Operacional <span>Salários Médios Ilustrativos — Fictícios</span></div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Cargo</th>
+            <th>Setor</th>
+            <th>Qtd.</th>
+            <th>Turno</th>
+            <th>Salário Médio</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Porteiro</td><td>Segurança / Apoio</td><td>18</td><td>3 turnos</td><td>R$ 2.150</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Faxineiro(a)</td><td>Serviços Gerais</td><td>45</td><td>2 turnos</td><td>R$ 1.980</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Auxiliar de Refeitório</td><td>Serviços Gerais</td><td>22</td><td>1 turno</td><td>R$ 2.050</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Vigilante Patrimonial</td><td>Segurança</td><td>62</td><td>3 turnos</td><td>R$ 3.200</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Operador de Produção N1</td><td>Produção</td><td>680</td><td>3 turnos</td><td>R$ 2.800</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Operador de Produção N2</td><td>Produção</td><td>520</td><td>3 turnos</td><td>R$ 3.400</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Técnico de Manutenção</td><td>Manutenção</td><td>213</td><td>2 turnos</td><td>R$ 5.200</td><td><span class="badge badge-yellow">1 vaga aberta</span></td></tr>
+          <tr><td>Analista de Qualidade</td><td>Qualidade</td><td>87</td><td>2 turnos</td><td>R$ 6.800</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Engenheiro de Processo</td><td>Engenharia</td><td>54</td><td>Comercial</td><td>R$ 11.500</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Supervisor de Linha</td><td>Produção</td><td>38</td><td>3 turnos</td><td>R$ 8.700</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Almoxarife</td><td>Logística</td><td>66</td><td>2 turnos</td><td>R$ 3.100</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Motorista de Pátio</td><td>Logística</td><td>28</td><td>3 turnos</td><td>R$ 3.600</td><td><span class="badge badge-yellow">Férias 3</span></td></tr>
+          <tr><td>Recepcionista</td><td>Administrativo</td><td>12</td><td>Comercial</td><td>R$ 2.700</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Analista RH</td><td>RH</td><td>28</td><td>Comercial</td><td>R$ 5.900</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>Gerente Geral</td><td>Diretoria</td><td>12</td><td>Comercial</td><td>R$ 28.000</td><td><span class="badge badge-green">Regular</span></td></tr>
+          <tr><td>VP / C-Level</td><td>Diretoria</td><td>9</td><td>Comercial</td><td>R$ 65.000</td><td><span class="badge badge-green">Regular</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ============= TAB: PRODUÇÃO ============= -->
+  <div class="tab-panel" id="tab-producao">
+
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--card-accent:var(--accent)">
+        <div class="kpi-label">Produção Diária (Hoje)</div>
+        <div class="kpi-value">198 un</div>
+        <div class="kpi-sub up">Meta: 190 ▲ superada</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--teal)">
+        <div class="kpi-label">OEE Linha 1</div>
+        <div class="kpi-value">87,2%</div>
+        <div class="kpi-sub up">▲ Excelente</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--blue)">
+        <div class="kpi-label">OEE Linha 2</div>
+        <div class="kpi-value">81,5%</div>
+        <div class="kpi-sub up">▲ Bom</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--warn)">
+        <div class="kpi-label">OEE Linha 3</div>
+        <div class="kpi-value">74,8%</div>
+        <div class="kpi-sub warn">▼ Manutenção</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--success)">
+        <div class="kpi-label">Taxa de Retrabalho</div>
+        <div class="kpi-value">1,3%</div>
+        <div class="kpi-sub up">▼ Meta 1,5% ok</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--gold)">
+        <div class="kpi-label">Scrap (Sucata)</div>
+        <div class="kpi-value">0,8%</div>
+        <div class="kpi-sub up">▼ Meta 1,0% ok</div>
+      </div>
+    </div>
+
+    <div class="sub-grid">
+      <div class="card">
+        <div class="card-title">Produção Mensal (2025–2026) <span>Unidades</span></div>
+        <div class="stacked-chart">
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:55%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:25%;background:var(--teal)"></div><div class="stacked-seg" style="height:15%;background:var(--blue)"></div></div><div class="stacked-month">Mar</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:58%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:24%;background:var(--teal)"></div><div class="stacked-seg" style="height:14%;background:var(--blue)"></div></div><div class="stacked-month">Abr</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:60%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:23%;background:var(--teal)"></div><div class="stacked-seg" style="height:13%;background:var(--blue)"></div></div><div class="stacked-month">Mai</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:52%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:22%;background:var(--teal)"></div><div class="stacked-seg" style="height:16%;background:var(--blue)"></div></div><div class="stacked-month">Jun</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:49%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:21%;background:var(--teal)"></div><div class="stacked-seg" style="height:12%;background:var(--blue)"></div></div><div class="stacked-month">Jul</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:55%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:24%;background:var(--teal)"></div><div class="stacked-seg" style="height:13%;background:var(--blue)"></div></div><div class="stacked-month">Ago</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:58%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:25%;background:var(--teal)"></div><div class="stacked-seg" style="height:14%;background:var(--blue)"></div></div><div class="stacked-month">Set</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:61%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:26%;background:var(--teal)"></div><div class="stacked-seg" style="height:12%;background:var(--blue)"></div></div><div class="stacked-month">Out</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:64%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:24%;background:var(--teal)"></div><div class="stacked-seg" style="height:11%;background:var(--blue)"></div></div><div class="stacked-month">Nov</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:62%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:25%;background:var(--teal)"></div><div class="stacked-seg" style="height:12%;background:var(--blue)"></div></div><div class="stacked-month">Dez</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:60%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:23%;background:var(--teal)"></div><div class="stacked-seg" style="height:14%;background:var(--blue)"></div></div><div class="stacked-month">Jan</div></div>
+          <div class="stacked-col"><div class="stacked-bar-wrap"><div class="stacked-seg" style="height:65%;background:var(--accent);border-radius:3px 3px 0 0"></div><div class="stacked-seg" style="height:25%;background:var(--teal)"></div><div class="stacked-seg" style="height:12%;background:var(--blue)"></div></div><div class="stacked-month">Fev</div></div>
+        </div>
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:10px;color:var(--muted);font-family:'DM Mono'">
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;background:var(--accent);border-radius:2px;display:inline-block"></span>Linha 1</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;background:var(--teal);border-radius:2px;display:inline-block"></span>Linha 2</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;background:var(--blue);border-radius:2px;display:inline-block"></span>Linha 3</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Metas de Qualidade <span>Indicadores</span></div>
+        <div class="progress-row">
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">Defeitos por Veículo</div>
+              <div class="progress-sub">Meta: ≤ 2,5 defeitos</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:68%;background:var(--success)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--success)">1,8</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">Satisfação Cliente (J.D. Power)</div>
+              <div class="progress-sub">Meta: ≥ 88 pontos</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:92%;background:var(--blue)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--blue)">91</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">First Pass Yield</div>
+              <div class="progress-sub">Meta: ≥ 97%</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:96%;background:var(--teal)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--teal)">96%</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">Taxa de Retrabalho</div>
+              <div class="progress-sub">Meta: ≤ 1,5%</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:87%;background:var(--gold)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--gold)">1,3%</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">PPM Externo</div>
+              <div class="progress-sub">Meta: ≤ 150 PPM</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:85%;background:var(--success)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--success)">127</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">Paradas não Planejadas</div>
+              <div class="progress-sub">Meta: ≤ 4h/mês</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:62%;background:var(--warn)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--warn)">5,2h</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela Ordens de Produção -->
+    <div class="card">
+      <div class="card-title">Ordens de Produção Ativas <span>Fev 2026</span></div>
+      <table class="data-table">
+        <thead>
+          <tr><th>OP</th><th>Modelo</th><th>Linha</th><th>Qtd. Prevista</th><th>Qtd. Realizada</th><th>Início</th><th>Previsão Fim</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>#OP-2601</td><td>NovaDrive Compact 1.0</td><td>Linha 1</td><td>1.200</td><td>980</td><td>01/02</td><td>28/02</td><td><span class="badge badge-blue">Em produção</span></td></tr>
+          <tr><td>#OP-2602</td><td>NovaDrive SUV 2.0T</td><td>Linha 2</td><td>900</td><td>820</td><td>03/02</td><td>28/02</td><td><span class="badge badge-blue">Em produção</span></td></tr>
+          <tr><td>#OP-2603</td><td>NovaDrive Pick-Up 2.4</td><td>Linha 3</td><td>650</td><td>480</td><td>05/02</td><td>28/02</td><td><span class="badge badge-yellow">Parcial</span></td></tr>
+          <tr><td>#OP-2604</td><td>NovaDrive Sedan 1.6</td><td>Linha 1</td><td>500</td><td>500</td><td>01/02</td><td>20/02</td><td><span class="badge badge-green">Concluída</span></td></tr>
+          <tr><td>#OP-2605</td><td>NovaDrive Van Cargo</td><td>Linha 2</td><td>200</td><td>62</td><td>18/02</td><td>10/03</td><td><span class="badge badge-blue">Em produção</span></td></tr>
+          <tr><td>#OP-2606</td><td>NovaDrive Elétrico EV1</td><td>Linha 3</td><td>180</td><td>0</td><td>25/02</td><td>20/03</td><td><span class="badge badge-red">Aguardando</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ============= TAB: FINANCEIRO ============= -->
+  <div class="tab-panel" id="tab-financeiro">
+
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--card-accent:var(--accent)">
+        <div class="kpi-label">Receita Bruta</div>
+        <div class="kpi-value">R$48,2M</div>
+        <div class="kpi-sub up">▲ 7,4% mês</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--success)">
+        <div class="kpi-label">EBITDA</div>
+        <div class="kpi-value">R$9,6M</div>
+        <div class="kpi-sub up">Margem: 19,9%</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--teal)">
+        <div class="kpi-label">Lucro Líquido</div>
+        <div class="kpi-value">R$6,1M</div>
+        <div class="kpi-sub up">Margem: 12,7%</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--blue)">
+        <div class="kpi-label">Custo Operacional</div>
+        <div class="kpi-value">R$32,4M</div>
+        <div class="kpi-sub warn">▲ 3,1% vs. jan</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--gold)">
+        <div class="kpi-label">Contas a Receber</div>
+        <div class="kpi-value">R$18,7M</div>
+        <div class="kpi-sub" style="color:var(--muted)">Prazo médio: 42d</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--accent)">
+        <div class="kpi-label">Endividamento</div>
+        <div class="kpi-value">R$24,3M</div>
+        <div class="kpi-sub warn">Índice: 0,51</div>
+      </div>
+    </div>
+
+    <div class="sub-grid">
+      <div class="card">
+        <div class="card-title">Distribuição de Custos <span>Fev 2026</span></div>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label">Mão de Obra Direta</div><div class="bar-track"><div class="bar-fill" style="width:35%;--bar-color:var(--accent)"></div></div><div class="bar-val">R$11,3M</div></div>
+          <div class="bar-row"><div class="bar-label">Matéria-Prima</div><div class="bar-track"><div class="bar-fill" style="width:30%;--bar-color:var(--blue)"></div></div><div class="bar-val">R$9,7M</div></div>
+          <div class="bar-row"><div class="bar-label">Energia Elétrica</div><div class="bar-track"><div class="bar-fill" style="width:12%;--bar-color:var(--gold)"></div></div><div class="bar-val">R$3,9M</div></div>
+          <div class="bar-row"><div class="bar-label">Logística & Frete</div><div class="bar-track"><div class="bar-fill" style="width:10%;--bar-color:var(--teal)"></div></div><div class="bar-val">R$3,2M</div></div>
+          <div class="bar-row"><div class="bar-label">Manutenção Equip.</div><div class="bar-track"><div class="bar-fill" style="width:8%;--bar-color:var(--accent2)"></div></div><div class="bar-val">R$2,6M</div></div>
+          <div class="bar-row"><div class="bar-label">Overhead Administrativo</div><div class="bar-track"><div class="bar-fill" style="width:5%;--bar-color:var(--muted)"></div></div><div class="bar-val">R$1,7M</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Evolução de Receita x Custo <span>Spark</span></div>
+        <div style="display:flex;gap:20px;margin-bottom:1rem">
+          <div>
+            <div style="font-size:10px;color:var(--muted);font-family:'DM Mono';letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Receita</div>
+            <div class="spark">
+              <div class="spark-bar" style="height:60%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:65%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:70%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:68%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:62%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:66%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:72%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:75%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:78%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:80%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:83%;background:rgba(78,142,247,0.4)"></div>
+              <div class="spark-bar" style="height:90%;background:var(--blue)"></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);font-family:'DM Mono';letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Custo Total</div>
+            <div class="spark">
+              <div class="spark-bar" style="height:55%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:57%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:58%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:56%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:54%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:57%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:59%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:61%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:63%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:65%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:67%;background:rgba(232,48,42,0.3)"></div>
+              <div class="spark-bar" style="height:69%;background:var(--accent)"></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-family:'DM Mono';text-transform:uppercase;letter-spacing:1px">Budget Anual 2026</div>
+          <div class="progress-row">
+            <div class="progress-item">
+              <div class="progress-info">
+                <div class="progress-name">Receita Realizada</div>
+                <div class="progress-sub">Meta anual: R$ 580M</div>
+                <div class="progress-bar-wrap"><div class="progress-bar" style="width:14%;background:var(--blue)"></div></div>
+              </div>
+              <div class="progress-pct" style="color:var(--blue)">14%</div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-info">
+                <div class="progress-name">Despesas Realizadas</div>
+                <div class="progress-sub">Budget: R$ 460M</div>
+                <div class="progress-bar-wrap"><div class="progress-bar" style="width:13%;background:var(--accent)"></div></div>
+              </div>
+              <div class="progress-pct" style="color:var(--accent)">13%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contas a Pagar -->
+    <div class="card">
+      <div class="card-title">Principais Fornecedores & Contas a Pagar <span>Fev 2026</span></div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Fornecedor</th><th>Categoria</th><th>Valor</th><th>Vencimento</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>SteelBras Metalurgia</td><td>Matéria-Prima</td><td>R$ 3,8M</td><td>28/02/2026</td><td><span class="badge badge-yellow">Pendente</span></td></tr>
+          <tr><td>PlastParts Componentes</td><td>Insumos</td><td>R$ 1,2M</td><td>25/02/2026</td><td><span class="badge badge-yellow">Pendente</span></td></tr>
+          <tr><td>EletroMotors SA</td><td>Componentes Elétricos</td><td>R$ 2,1M</td><td>15/02/2026</td><td><span class="badge badge-green">Pago</span></td></tr>
+          <tr><td>LogiSpeed Transportes</td><td>Frete & Logística</td><td>R$ 980K</td><td>10/02/2026</td><td><span class="badge badge-green">Pago</span></td></tr>
+          <tr><td>Cesp Energia</td><td>Energia Elétrica</td><td>R$ 1,6M</td><td>05/03/2026</td><td><span class="badge badge-blue">A vencer</span></td></tr>
+          <tr><td>TechManut Services</td><td>Manutenção Equipamentos</td><td>R$ 540K</td><td>01/03/2026</td><td><span class="badge badge-blue">A vencer</span></td></tr>
+          <tr><td>Itaú BBA (Financiamento)</td><td>Serviços Financeiros</td><td>R$ 4,2M</td><td>05/03/2026</td><td><span class="badge badge-blue">A vencer</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ============= TAB: FROTA ============= -->
+  <div class="tab-panel" id="tab-frota">
+
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--card-accent:var(--accent)">
+        <div class="kpi-label">Total Veículos Frota</div>
+        <div class="kpi-value">284</div>
+        <div class="kpi-sub" style="color:var(--muted)">Próprios + Terceiros</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--success)">
+        <div class="kpi-label">Em Operação</div>
+        <div class="kpi-value">231</div>
+        <div class="kpi-sub up">81,3% disponibilidade</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--warn)">
+        <div class="kpi-label">Em Manutenção</div>
+        <div class="kpi-value">28</div>
+        <div class="kpi-sub warn">9,9% da frota</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--blue)">
+        <div class="kpi-label">Entregas no Mês</div>
+        <div class="kpi-value">1.840</div>
+        <div class="kpi-sub up">▲ 4,2% vs. jan</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--gold)">
+        <div class="kpi-label">Km Rodados (Mês)</div>
+        <div class="kpi-value">148K km</div>
+        <div class="kpi-sub" style="color:var(--muted)">Média: 640 km/veíc.</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--teal)">
+        <div class="kpi-label">Custo Combustível</div>
+        <div class="kpi-value">R$421K</div>
+        <div class="kpi-sub warn">▲ 2,1% vs. jan</div>
+      </div>
+    </div>
+
+    <div class="sub-grid">
+      <div class="card">
+        <div class="card-title">Distribuição da Frota <span>Por Tipo</span></div>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label">Caminhões Pesados</div><div class="bar-track"><div class="bar-fill" style="width:35%;--bar-color:var(--accent)"></div></div><div class="bar-val">48</div></div>
+          <div class="bar-row"><div class="bar-label">Carretas / Bi-Trem</div><div class="bar-track"><div class="bar-fill" style="width:22%;--bar-color:var(--accent2)"></div></div><div class="bar-val">30</div></div>
+          <div class="bar-row"><div class="bar-label">Vans de Entrega</div><div class="bar-track"><div class="bar-fill" style="width:28%;--bar-color:var(--blue)"></div></div><div class="bar-val">38</div></div>
+          <div class="bar-row"><div class="bar-label">Veículos Executivos</div><div class="bar-track"><div class="bar-fill" style="width:18%;--bar-color:var(--gold)"></div></div><div class="bar-val">24</div></div>
+          <div class="bar-row"><div class="bar-label">Empilhadeiras</div><div class="bar-track"><div class="bar-fill" style="width:50%;--bar-color:var(--teal)"></div></div><div class="bar-val">68</div></div>
+          <div class="bar-row"><div class="bar-label">AGVs de Pátio</div><div class="bar-track"><div class="bar-fill" style="width:40%;--bar-color:var(--success)"></div></div><div class="bar-val">54</div></div>
+          <div class="bar-row"><div class="bar-label">Ônibus de Funcionários</div><div class="bar-track"><div class="bar-fill" style="width:16%;--bar-color:var(--muted)"></div></div><div class="bar-val">22</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Status Frota Executiva <span>Monitoramento</span></div>
+        <table class="data-table">
+          <thead><tr><th>Veículo</th><th>Motorista</th><th>Status</th><th>Km Total</th></tr></thead>
+          <tbody>
+            <tr><td>Toyota Corolla XEi</td><td>Carlos Mendes</td><td><span class="fleet-status"><span class="fleet-dot" style="background:var(--success)"></span>Disponível</span></td><td>48.200</td></tr>
+            <tr><td>VW Amarok V6</td><td>Roberto Silva</td><td><span class="fleet-status"><span class="fleet-dot" style="background:var(--blue)"></span>Em uso</span></td><td>63.100</td></tr>
+            <tr><td>Toyota Hilux SW4</td><td>Paula Fernandes</td><td><span class="fleet-status"><span class="fleet-dot" style="background:var(--success)"></span>Disponível</span></td><td>31.800</td></tr>
+            <tr><td>BMW Série 3</td><td>Thiago (CEO)</td><td><span class="fleet-status"><span class="fleet-dot" style="background:var(--blue)"></span>Em uso</span></td><td>18.400</td></tr>
+            <tr><td>Ford Transit</td><td>Marcelo Torres</td><td><span class="fleet-status"><span class="fleet-dot" style="background:var(--warn)"></span>Revisão</span></td><td>74.600</td></tr>
+            <tr><td>Renault Master</td><td>—</td><td><span class="fleet-status"><span class="fleet-dot" style="background:var(--accent)"></span>Manutenção</span></td><td>92.300</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============= TAB: OPERACIONAL ============= -->
+  <div class="tab-panel" id="tab-operacional">
+
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--card-accent:var(--accent)">
+        <div class="kpi-label">Acidentes no Ano</div>
+        <div class="kpi-value">3</div>
+        <div class="kpi-sub" style="color:var(--muted)">2 leves · 1 médio</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--success)">
+        <div class="kpi-label">Dias sem Acid. Grave</div>
+        <div class="kpi-value">248</div>
+        <div class="kpi-sub up">▲ Recorde anual</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--blue)">
+        <div class="kpi-label">Tickets TI Abertos</div>
+        <div class="kpi-value">47</div>
+        <div class="kpi-sub warn">SLA: 89% no prazo</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--teal)">
+        <div class="kpi-label">Compras (Mês)</div>
+        <div class="kpi-value">R$14,8M</div>
+        <div class="kpi-sub" style="color:var(--muted)">312 pedidos</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--gold)">
+        <div class="kpi-label">Estoque MP</div>
+        <div class="kpi-value">18 dias</div>
+        <div class="kpi-sub up">Meta: 15–20d ✓</div>
+      </div>
+      <div class="kpi-card" style="--card-accent:var(--warn)">
+        <div class="kpi-label">Chamados Manutenção</div>
+        <div class="kpi-value">92</div>
+        <div class="kpi-sub warn">18 em aberto</div>
+      </div>
+    </div>
+
+    <div class="sub-grid">
+      <div class="card">
+        <div class="card-title">SSMA — Segurança, Saúde e Meio Ambiente <span>YTD 2026</span></div>
+        <div class="progress-row">
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">EPIs Distribuídos no Mês</div>
+              <div class="progress-sub">Capacetes, luvas, óculos, botinas</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%;background:var(--success)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--success)">100%</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">Treinamentos de Segurança</div>
+              <div class="progress-sub">Meta: 100% colaboradores/ano</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:82%;background:var(--blue)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--blue)">82%</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">Resíduos Reciclados</div>
+              <div class="progress-sub">Meta: ≥ 80%</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:86%;background:var(--teal)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--teal)">86%</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">Consumo de Água Reduzido</div>
+              <div class="progress-sub">vs. meta -15% ao ano</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:73%;background:var(--gold)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--gold)">-11%</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-info">
+              <div class="progress-name">Emissões CO₂ (t/veíc.)</div>
+              <div class="progress-sub">Meta: ≤ 0,42 t/veíc.</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:88%;background:var(--success)"></div></div>
+            </div>
+            <div class="progress-pct" style="color:var(--success)">0,39</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Vendas por Canal <span>Fev 2026</span></div>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label">Concessionárias</div><div class="bar-track"><div class="bar-fill" style="width:62%;--bar-color:var(--accent)"></div></div><div class="bar-val">2.387</div></div>
+          <div class="bar-row"><div class="bar-label">Venda Direta PJ</div><div class="bar-track"><div class="bar-fill" style="width:22%;--bar-color:var(--blue)"></div></div><div class="bar-val">847</div></div>
+          <div class="bar-row"><div class="bar-label">Frotas Corporativas</div><div class="bar-track"><div class="bar-fill" style="width:18%;--bar-color:var(--teal)"></div></div><div class="bar-val">693</div></div>
+          <div class="bar-row"><div class="bar-label">Exportação</div><div class="bar-track"><div class="bar-fill" style="width:10%;--bar-color:var(--gold)"></div></div><div class="bar-val">385</div></div>
+          <div class="bar-row"><div class="bar-label">E-commerce / App</div><div class="bar-track"><div class="bar-fill" style="width:4%;--bar-color:var(--accent2)"></div></div><div class="bar-val">154</div></div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="card-title" style="margin-bottom:8px">Top Modelos Vendidos</div>
+          <div class="bar-chart">
+            <div class="bar-row"><div class="bar-label">NovaDrive SUV 2.0T</div><div class="bar-track"><div class="bar-fill" style="width:55%;--bar-color:var(--accent)"></div></div><div class="bar-val">1.248</div></div>
+            <div class="bar-row"><div class="bar-label">NovaDrive Compact 1.0</div><div class="bar-track"><div class="bar-fill" style="width:45%;--bar-color:var(--blue)"></div></div><div class="bar-val">1.020</div></div>
+            <div class="bar-row"><div class="bar-label">NovaDrive Pick-Up 2.4</div><div class="bar-track"><div class="bar-fill" style="width:38%;--bar-color:var(--teal)"></div></div><div class="bar-val">860</div></div>
+            <div class="bar-row"><div class="bar-label">NovaDrive Sedan 1.6</div><div class="bar-track"><div class="bar-fill" style="width:25%;--bar-color:var(--gold)"></div></div><div class="bar-val">568</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manutenção Equipamentos -->
+    <div class="card">
+      <div class="card-title">Ordens de Serviço — Manutenção <span>Aberto + Fechado</span></div>
+      <table class="data-table">
+        <thead>
+          <tr><th>OS</th><th>Equipamento</th><th>Área</th><th>Tipo</th><th>Prioridade</th><th>Responsável</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>#OS-4420</td><td>Prensa P-07</td><td>Estamparia</td><td>Corretiva</td><td><span class="badge badge-red">Alta</span></td><td>C. Menezes</td><td><span class="badge badge-blue">Em andamento</span></td></tr>
+          <tr><td>#OS-4418</td><td>Robô Solda R-12</td><td>Montagem</td><td>Preventiva</td><td><span class="badge badge-yellow">Média</span></td><td>Igor Santos</td><td><span class="badge badge-blue">Em andamento</span></td></tr>
+          <tr><td>#OS-4415</td><td>Cabine Pintura C-02</td><td>Pintura</td><td>Preditiva</td><td><span class="badge badge-yellow">Média</span></td><td>Fernanda Lima</td><td><span class="badge badge-green">Concluída</span></td></tr>
+          <tr><td>#OS-4410</td><td>Esteira Transportadora T-04</td><td>Logística</td><td>Corretiva</td><td><span class="badge badge-red">Alta</span></td><td>Paulo Costa</td><td><span class="badge badge-green">Concluída</span></td></tr>
+          <tr><td>#OS-4407</td><td>Compressor AR-01</td><td>Utilidades</td><td>Preventiva</td><td><span class="badge badge-blue">Baixa</span></td><td>Ricardo Teles</td><td><span class="badge badge-yellow">Aguardando Peça</span></td></tr>
+          <tr><td>#OS-4401</td><td>Gerador de Emergência G-01</td><td>Elétrica</td><td>Preventiva</td><td><span class="badge badge-yellow">Média</span></td><td>João Pereira</td><td><span class="badge badge-green">Concluída</span></td></tr>
+          <tr><td>#OS-4398</td><td>AGV de Pátio #14</td><td>Logística</td><td>Corretiva</td><td><span class="badge badge-red">Alta</span></td><td>Márcio Braga</td><td><span class="badge badge-red">Parado — Peça</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">NOVADRIVE INDUSTRIES</div>
+  <div class="footer-disclaimer">
+    <strong>Projeto Fictício para Portfólio Profissional.</strong><br>
+    Este dashboard foi desenvolvido exclusivamente para fins educacionais e demonstração técnica. Todos os dados, nomes, indicadores, valores financeiros e estruturas organizacionais são totalmente fictícios e não representam qualquer empresa real, pessoa física ou jurídica. A empresa "NovaDrive Industries" não existe. Qualquer semelhança com situações ou entidades reais é mera coincidência.<br><br>
+    Projeto desenvolvido exclusivamente para fins educacionais, acadêmicos e de portfólio profissional, sem qualquer finalidade comercial. <strong>Autor: Alessandro Guimarães Pereira</strong>
+  </div>
+  <div class="footer-tags">
+    <span class="footer-tag">🎓 Portfólio Profissional</span>
+    <span class="footer-tag">📊 Dados Fictícios</span>
+    <span class="footer-tag">🚗 NovaDrive Industries — Simulação</span>
+    <span class="footer-tag">HTML · CSS · JavaScript</span>
+    <span class="footer-tag">Dashboard Corporativo</span>
+  </div>
+  <div style="margin-top:12px;font-size:11px;color:var(--muted);font-family:'DM Mono'">
+    © 2026 NovaDrive Industries (Fictício) · Demonstração Técnica · Alessandro Guimarães Pereira
+  </div>
+</footer>
+
+<script>
+  // CLOCK
+  function updateClock(){
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleString('pt-BR',{
+      day:'2-digit', month:'2-digit', year:'numeric',
+      hour:'2-digit', minute:'2-digit', second:'2-digit'
+    });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // TABS
+  function switchTab(name){
+    document.querySelectorAll('.tab-panel').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // ANIMATE BARS on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.style.animationPlayState = 'running';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.bar-fill, .progress-bar').forEach(el => {
+    el.style.animationPlayState = 'paused';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
